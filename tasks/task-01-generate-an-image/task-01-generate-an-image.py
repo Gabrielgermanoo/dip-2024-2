@@ -16,9 +16,17 @@ def generate_image(seed, width, height, mean, std):
     Returns:
         image (numpy.ndarray): The generated image.
     """
-    ### START CODE HERE ###
-    ### TODO
-    ### END CODE HERE ###
+    # Set the random seed
+    np.random.seed(seed)
+    
+    # Generate the image
+    image = np.random.normal(mean, std, (height, width))
+    
+    # Normalize the image to the range [0, 255]
+    image = cv2.normalize(image, None, 0, 255, cv2.NORM_MINMAX)
+    
+    # Convert the image to 8-bit unsigned integer
+    image = image.astype(np.uint8)
 
     return image
 
