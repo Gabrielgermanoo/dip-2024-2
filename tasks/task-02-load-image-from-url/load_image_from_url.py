@@ -1,6 +1,8 @@
 import argparse
 import numpy as np
 import cv2 as cv
+import requests
+
 
 def load_image_from_url(url, **kwargs):
     """
@@ -13,11 +15,20 @@ def load_image_from_url(url, **kwargs):
     Returns:
     - image: Loaded image as a NumPy array.
     """
+    url_response = requests.get(url)
     
-    ### START CODE HERE ###
-    ### TODO
-    ### END CODE HERE ###
+    url_response.raise_for_status()
+    
+    flags = kwargs.get('flags', cv.IMREAD_COLOR)
+    image = cv.imdecode(np.frombuffer(url_response.content, np.uint8), flags)
     
     return image
 
-load_image_from_url()
+url = "https://picsum.photos/id/237/200/300"
+
+image = load_image_from_url(url)
+
+image = cv.resize(image, (400, 600))
+
+# save image
+cv.imwrite("./output/image.jpg", image)
